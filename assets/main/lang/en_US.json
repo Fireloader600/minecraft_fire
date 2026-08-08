@@ -1,0 +1,13 @@
+{
+    "title": "fire",
+    "selectVersion": "Select Version",
+    "download": "Download",
+    "dataPack": "Data Pack",
+    "resourcePack": "Resource Pack",
+    "experimental": "Experimental",
+    "version": "Version",
+    "close": "Close",
+    "noVersions": "No versions available",
+    "madeWith": "fireloader",
+    "settingsTitle": "Language"
+}

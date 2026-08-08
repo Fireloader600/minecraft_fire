@@ -1,0 +1,13 @@
+{
+    "title": "fire",
+    "selectVersion": "选择版本",
+    "download": "下载",
+    "dataPack": "数据包",
+    "resourcePack": "资源包",
+    "experimental": "实验性",
+    "version": "版本",
+    "close": "关闭",
+    "noVersions": "没有可用版本",
+    "madeWith": "fireloader",
+    "settingsTitle": "语言"
+}

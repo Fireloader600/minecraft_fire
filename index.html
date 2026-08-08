@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>fire</title>
+    <link rel="icon" type="image/svg+xml" href="assets/main/textures/favicon.svg" />
+    <style>
+        /* ===== 完整样式（与上一版完全相同） ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #0b0806;
+            background-image:
+                radial-gradient(ellipse at 30% 20%, rgba(180, 60, 0, 0.35) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 70%, rgba(220, 80, 0, 0.25) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 100%, rgba(140, 40, 0, 0.20) 0%, transparent 40%);
+            background-attachment: fixed;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 720px;
+            width: 100%;
+            animation: fadeUp 0.8s ease-out both;
+        }
+        @keyframes fadeUp {
+            0% { opacity: 0; transform: translateY(25px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+        .main-title {
+            text-align: left;
+            font-size: clamp(2.2rem, 6vw, 3.2rem);
+            font-weight: 900;
+            letter-spacing: 0.04em;
+            background: linear-gradient(135deg, #ff9a3c, #ff5e00, #ff2a00, #ff7a00);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: shimmerTitle 5s ease-in-out infinite alternate;
+        }
+        @keyframes shimmerTitle {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        .title-icon {
+            width: 1em;
+            height: 1em;
+            display: inline-block;
+            flex-shrink: 0;
+            -webkit-text-fill-color: initial;
+        }
+        .title-underline {
+            width: 70px;
+            height: 3px;
+            margin: 6px 0 30px 0;
+            background: linear-gradient(90deg, #ff6a00, transparent);
+            border-radius: 4px;
+            opacity: 0.6;
+        }
+
+        /* 设置按钮 */
+        .settings-btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #d4c0b0;
+            padding: 6px 10px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s, transform 0.2s;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .settings-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: scale(1.02);
+        }
+        .settings-btn:active {
+            transform: scale(0.95);
+        }
+        .settings-btn img {
+            width: 1.4em;
+            height: 1.4em;
+            display: block;
+        }
+
+        /* 以下卡片样式不变（省略重复） */
+        .packs-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        .project-card {
+            display: none;
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 140, 40, 0.15);
+            border-radius: 24px;
+            padding: 30px 28px 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+        }
+        .project-card.visible {
+            display: block;
+        }
+        .project-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7), 0 0 40px rgba(255, 100, 0, 0.06);
+            border-color: rgba(255, 150, 50, 0.30);
+        }
+        .project-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 4px;
+            flex-wrap: wrap;
+        }
+        .project-icon {
+            width: 46px;
+            height: 46px;
+            flex-shrink: 0;
+            background: rgba(255, 120, 20, 0.15);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 140, 40, 0.1);
+            padding: 8px;
+        }
+        .project-icon img {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        .project-name {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #f0e6d8;
+            letter-spacing: 0.02em;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px 12px;
+        }
+        .badge {
+            font-size: 0.65rem;
+            font-weight: 600;
+            background: rgba(255, 140, 40, 0.15);
+            color: #ffb074;
+            padding: 2px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 140, 40, 0.1);
+            text-transform: uppercase;
+        }
+        .type-badge {
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 2px 12px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .type-badge.data {
+            background: rgba(60, 180, 255, 0.15);
+            color: #6ab0e6;
+            border: 1px solid rgba(60, 180, 255, 0.15);
+        }
+        .type-badge.resource {
+            background: rgba(255, 180, 40, 0.15);
+            color: #ffb74d;
+            border: 1px solid rgba(255, 180, 40, 0.15);
+        }
+        .project-note {
+            margin-top: 6px;
+            font-size: 0.95rem;
+            color: #b8a89a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .note-icon {
+            width: 18px;
+            height: 18px;
+            display: inline-block;
+        }
+        .note-icon img {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        .note-text {
+            background: rgba(255, 200, 100, 0.05);
+            padding: 2px 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 200, 100, 0.06);
+            font-size: 0.85rem;
+            color: #d4c0b0;
+        }
+        .version-tag {
+            background: rgba(255, 100, 50, 0.12);
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            color: #ffb074;
+            border: 1px solid rgba(255, 100, 50, 0.1);
+        }
+        .experimental-badge {
+            display: inline-block;
+            background: rgba(255, 40, 40, 0.15);
+            color: #ff6b6b;
+            padding: 2px 14px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(255, 40, 40, 0.25);
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+        .experimental-badge.hidden {
+            display: none;
+        }
+        .divider {
+            margin: 18px 0 22px 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 140, 40, 0.12), transparent);
+        }
+        .download-area {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .download-info {
+            font-size: 0.85rem;
+            color: #8a7a6a;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .download-info .info-icon {
+            width: 18px;
+            height: 18px;
+            display: inline-block;
+        }
+        .download-info .info-icon img {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        .file-size {
+            background: rgba(255, 255, 255, 0.04);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: #9a8a7a;
+        }
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 34px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #fff;
+            background: linear-gradient(135deg, #ff7a2a, #f05000);
+            border: none;
+            border-radius: 60px;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 6px 24px rgba(255, 80, 0, 0.35);
+            transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease, background 0.3s ease;
+            letter-spacing: 0.03em;
+            flex-shrink: 0;
+        }
+        .download-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 10px 40px rgba(255, 80, 0, 0.5);
+            background: linear-gradient(135deg, #ff8a3a, #f05a00);
+        }
+        .download-btn:active {
+            transform: scale(0.95);
+        }
+        .download-btn .btn-icon {
+            width: 1.2rem;
+            height: 1.2rem;
+            display: inline-block;
+        }
+        .download-btn .btn-icon img {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* 模态框 */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+            animation: fadeIn 0.25s ease-out;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        .modal-box {
+            background: rgba(20, 14, 10, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 140, 40, 0.2);
+            border-radius: 28px;
+            padding: 32px 30px 28px;
+            max-width: 480px;
+            width: 100%;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
+            transform: scale(0.95);
+            transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .modal-overlay.active .modal-box {
+            transform: scale(1);
+        }
+
+        .settings-modal .modal-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #f0e6d8;
+            text-align: center;
+            margin-bottom: 20px;
+            letter-spacing: 0.02em;
+        }
+        .settings-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .settings-option {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 14px 18px;
+            color: #d4c0b0;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+            text-align: left;
+        }
+        .settings-option:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 140, 40, 0.2);
+        }
+        .settings-option.selected {
+            background: rgba(255, 140, 40, 0.1);
+            border-color: rgba(255, 140, 40, 0.3);
+            color: #f0e6d8;
+        }
+        .modal-close {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 40px;
+            color: #b8a89a;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            text-align: center;
+            letter-spacing: 0.02em;
+        }
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #f0e6d8;
+        }
+
+        .version-modal .modal-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #f0e6d8;
+            text-align: center;
+            margin-bottom: 20px;
+            letter-spacing: 0.02em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .version-modal .modal-title img {
+            width: 1.2em;
+            height: 1.2em;
+            display: inline-block;
+        }
+        .version-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 24px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+        .version-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .version-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+        }
+        .version-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 140, 40, 0.3);
+            border-radius: 10px;
+        }
+        .version-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .version-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 140, 40, 0.15);
+        }
+        .version-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .version-icon {
+            width: 28px;
+            height: 28px;
+            flex-shrink: 0;
+        }
+        .version-icon img {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        .version-number {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #e8ddd0;
+            letter-spacing: 0.01em;
+        }
+        .version-download {
+            width: 32px;
+            height: 32px;
+            padding: 4px;
+            border-radius: 50%;
+            background: rgba(255, 120, 20, 0.12);
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .version-download:hover {
+            background: rgba(255, 120, 20, 0.25);
+            transform: scale(1.08);
+        }
+        .version-download:active {
+            transform: scale(0.92);
+        }
+        .version-download img {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.7rem;
+            color: rgba(255, 200, 160, 0.08);
+            letter-spacing: 0.06em;
+        }
+
+        @media (max-width: 500px) {
+            .project-card { padding: 20px 18px; }
+            .project-name { font-size: 1.25rem; }
+            .download-area { flex-direction: column; align-items: stretch; }
+            .download-btn { width: 100%; justify-content: center; }
+            .download-info { justify-content: center; }
+            .modal-box { padding: 24px 18px; }
+            .version-item { padding: 10px 12px; }
+            .project-note { gap: 6px; }
+            .experimental-badge { font-size: 0.7rem; padding: 1px 10px; }
+            .header { flex-wrap: wrap; gap: 8px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="main-title">
+                <img src="assets/main/textures/fire.svg" alt="Fire" class="title-icon" />
+                <span id="mainTitleText">fire</span>
+            </h1>
+            <!-- 设置按钮：使用动图 settings.gif -->
+            <button class="settings-btn" id="settingsBtn" aria-label="Settings">
+                <img src="assets/main/textures/settings.gif" alt="Settings" />
+            </button>
+        </div>
+        <div class="title-underline"></div>
+
+        <div class="packs-grid" id="packsGrid"></div>
+
+        <div class="footer" id="footerText">
+            <span>fireloader</span>
+        </div>
+    </div>
+
+    <!-- 设置模态框 -->
+    <div class="modal-overlay settings-modal" id="settingsModal">
+        <div class="modal-box">
+            <div class="modal-title" id="settingsTitle">Language</div>
+            <div class="settings-options" id="settingsOptions">
+                <button class="settings-option" data-lang="en-US">English</button>
+                <button class="settings-option" data-lang="zh-CN">简体中文</button>
+                <button class="settings-option" data-lang="zh-TW">繁體中文</button>
+            </div>
+            <button class="modal-close" id="settingsCloseBtn">Close</button>
+        </div>
+    </div>
+
+    <!-- 版本选择模态框 -->
+    <div class="modal-overlay version-modal" id="versionModal">
+        <div class="modal-box">
+            <div class="modal-title">
+                <img src="assets/main/textures/package.svg" alt="Package" />
+                <span id="modalTitleText">Select Version</span>
+            </div>
+            <div class="version-list" id="versionList"></div>
+            <button class="modal-close" id="closeModalBtn">Close</button>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // =============================================================
+            // 1. 语言管理
+            // =============================================================
+            const LANG_FOLDER = 'assets/main/lang/';
+            const SETTINGS_PATH = 'data/main/settings/settings.json';
+
+            let currentLang = 'en-US';
+            let langData = {};
+
+            const defaultLang = {
+                "title": "fire",
+                "selectVersion": "Select Version",
+                "download": "Download",
+                "dataPack": "Data Pack",
+                "resourcePack": "Resource Pack",
+                "experimental": "Experimental",
+                "version": "Version",
+                "close": "Close",
+                "noVersions": "No versions available",
+                "madeWith": "fireloader",
+                "settingsTitle": "Language"
+            };
+
+            async function loadLanguage(langCode) {
+                try {
+                    const res = await fetch(LANG_FOLDER + langCode + '.json');
+                    if (!res.ok) throw new Error('Language file not found');
+                    const data = await res.json();
+                    langData = { ...defaultLang, ...data };
+                } catch (e) {
+                    console.warn('Failed to load language, using default English.', e);
+                    langData = { ...defaultLang };
+                }
+                applyLanguage();
+            }
+
+            function applyLanguage() {
+                document.getElementById('mainTitleText').textContent = langData.title || 'fire';
+                document.getElementById('modalTitleText').textContent = langData.selectVersion || 'Select Version';
+                document.getElementById('closeModalBtn').textContent = langData.close || 'Close';
+                document.getElementById('footerText').innerHTML = langData.madeWith || 'fireloader';
+                document.getElementById('settingsTitle').textContent = langData.settingsTitle || 'Language';
+            }
+
+            async function setLanguage(langCode) {
+                if (langCode === currentLang) return;
+                currentLang = langCode;
+                localStorage.setItem('fire-datapack-lang', langCode);
+                await loadLanguage(langCode);
+                await loadAllPacks();
+                document.querySelectorAll('.settings-option').forEach(btn => {
+                    btn.classList.toggle('selected', btn.dataset.lang === langCode);
+                });
+            }
+
+            async function initLanguage() {
+                let lang = localStorage.getItem('fire-datapack-lang') || 'en-US';
+                try {
+                    const res = await fetch(SETTINGS_PATH);
+                    if (res.ok) {
+                        const settings = await res.json();
+                        if (settings.language) {
+                            lang = settings.language;
+                            localStorage.setItem('fire-datapack-lang', lang);
+                        }
+                    }
+                } catch (e) { /* ignore */ }
+
+                currentLang = lang;
+                await loadLanguage(lang);
+                document.querySelectorAll('.settings-option').forEach(btn => {
+                    btn.classList.toggle('selected', btn.dataset.lang === lang);
+                });
+            }
+
+            // =============================================================
+            // 2. 设置模态框控制
+            // =============================================================
+            const settingsBtn = document.getElementById('settingsBtn');
+            const settingsModal = document.getElementById('settingsModal');
+            const settingsCloseBtn = document.getElementById('settingsCloseBtn');
+
+            function openSettings() {
+                settingsModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeSettings() {
+                settingsModal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            settingsBtn.addEventListener('click', openSettings);
+            settingsCloseBtn.addEventListener('click', closeSettings);
+            settingsModal.addEventListener('click', function(e) {
+                if (e.target === settingsModal) closeSettings();
+            });
+
+            document.querySelectorAll('.settings-option').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const lang = this.dataset.lang;
+                    setLanguage(lang);
+                    closeSettings();
+                });
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    if (settingsModal.classList.contains('active')) closeSettings();
+                    if (versionModal.classList.contains('active')) closeModal();
+                }
+            });
+
+            // =============================================================
+            // 3. 数据包 / 资源包 加载
+            // =============================================================
+            const PACK_JSON_FILES = [
+                'neovillage.json',
+                'structure_optimization.json'
+            ];
+
+            const JSON_BASE = 'data/main/file/';
+            const DOWNLOAD_BASE = 'assets/main/download_src/';
+            const ICON_VERSION = 'assets/main/textures/version.svg';
+            const ICON_DOWNLOAD = 'assets/main/textures/download.svg';
+            const ICON_PACKAGE = 'assets/main/textures/package.svg';
+            const ICON_PIN = 'assets/main/textures/pin.svg';
+            const ICON_CLIP = 'assets/main/textures/clip.svg';
+
+            const packsGrid = document.getElementById('packsGrid');
+            const versionModal = document.getElementById('versionModal');
+            const versionList = document.getElementById('versionList');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+
+            function getVersionType(v) {
+                const map = { 1: 'Alpha', 2: 'Beta', 3: 'Stable Beta', 4: 'Official' };
+                return map[v] || 'Unknown';
+            }
+
+            function getPackType(checkCode) {
+                if (checkCode === 1 || checkCode === 48) return 'data';
+                if (checkCode === 0 || checkCode === 24) return 'resource';
+                return null;
+            }
+
+            function openModal(packData) {
+                versionList.innerHTML = '';
+                const availableVersions = packData._availableVersions || [];
+                if (availableVersions.length === 0) {
+                    versionList.innerHTML = `<div style="text-align:center;color:#8a7a6a;padding:20px 0;">${langData.noVersions || 'No versions available'}</div>`;
+                } else {
+                    availableVersions.forEach(item => {
+                        const div = document.createElement('div');
+                        div.className = 'version-item';
+                        div.innerHTML = `
+                            <div class="version-left">
+                                <span class="version-icon"><img src="${ICON_VERSION}" alt="Version" /></span>
+                                <span class="version-number">${item.version}</span>
+                            </div>
+                            <button class="version-download" aria-label="Download version ${item.version}">
+                                <img src="${ICON_DOWNLOAD}" alt="Download" />
+                            </button>
+                        `;
+                        const dlBtn = div.querySelector('.version-download');
+                        dlBtn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            const a = document.createElement('a');
+                            a.href = DOWNLOAD_BASE + item.file;
+                            a.download = item.file;
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                        });
+                        versionList.appendChild(div);
+                    });
+                }
+                versionModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal() {
+                versionModal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            if (!window._modalBound) {
+                closeModalBtn.addEventListener('click', closeModal);
+                versionModal.addEventListener('click', function(e) {
+                    if (e.target === versionModal) closeModal();
+                });
+                window._modalBound = true;
+            }
+
+            async function loadPack(jsonFileName) {
+                try {
+                    const res = await fetch(JSON_BASE + jsonFileName);
+                    if (!res.ok) return null;
+                    const data = await res.json();
+
+                    const checkCode = data.check_code;
+                    const packType = getPackType(checkCode);
+                    if (!packType) return null;
+
+                    const name = data.name || 'unknown.zip';
+                    const versionType = getVersionType(data.version);
+                    const note = data.note || '';
+                    const verlevel = data.verlevel;
+                    const fileMap = data.file || {};
+                    const minecraftVersions = data.minecraft || [];
+                    const isExperimental = data.experimental === true;
+
+                    const available = [];
+                    for (const mcVer of minecraftVersions) {
+                        const fileName = fileMap[mcVer];
+                        if (fileName) available.push({ version: mcVer, file: fileName + '.zip' });
+                    }
+                    available.sort((a, b) => b.version.localeCompare(a.version, undefined, { numeric: true }));
+
+                    return { name, versionType, note, verlevel, isExperimental, available, packType };
+                } catch (e) {
+                    return null;
+                }
+            }
+
+            async function loadAllPacks() {
+                packsGrid.innerHTML = '';
+
+                for (const fileName of PACK_JSON_FILES) {
+                    const pack = await loadPack(fileName);
+                    if (!pack || pack.available.length === 0) continue;
+
+                    const card = document.createElement('div');
+                    card.className = 'project-card';
+                    const expClass = pack.isExperimental ? '' : 'hidden';
+
+                    const typeLabel = pack.packType === 'data' ? (langData.dataPack || 'Data Pack') : (langData.resourcePack || 'Resource Pack');
+                    const typeClass = pack.packType === 'data' ? 'data' : 'resource';
+
+                    card.innerHTML = `
+                        <div class="project-header">
+                            <div class="project-icon"><img src="${ICON_PACKAGE}" alt="Package" /></div>
+                            <div class="project-name">
+                                <span>${pack.name}</span>
+                                <span class="badge">${pack.versionType}</span>
+                                <span class="type-badge ${typeClass}">${typeLabel}</span>
+                            </div>
+                        </div>
+                        <div class="project-note">
+                            <span class="note-icon"><img src="${ICON_PIN}" alt="Pin" /></span>
+                            <span class="note-text">${pack.note}</span>
+                            <span class="version-tag">${langData.version || 'Version'} ${pack.verlevel}</span>
+                            <span class="experimental-badge ${expClass}">${langData.experimental || 'Experimental'}</span>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="download-area">
+                            <div class="download-info">
+                                <span class="info-icon"><img src="${ICON_CLIP}" alt="Clip" /></span>
+                                <span>${langData.dataPack || 'Data Pack'}</span>
+                                <span class="file-size">~1.2 MB</span>
+                            </div>
+                            <button class="download-btn" data-pack-name="${pack.name}">
+                                <span class="btn-icon"><img src="${ICON_DOWNLOAD}" alt="Download" /></span>
+                                ${langData.download || 'Download'}
+                            </button>
+                        </div>
+                    `;
+                    const btn = card.querySelector('.download-btn');
+                    pack._availableVersions = pack.available;
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        openModal(pack);
+                    });
+                    card.classList.add('visible');
+                    packsGrid.appendChild(card);
+                }
+            }
+
+            // =============================================================
+            // 启动
+            // =============================================================
+            async function init() {
+                await initLanguage();
+                await loadAllPacks();
+            }
+
+            init();
+        })();
+    </script>
+</body>
+</html>
