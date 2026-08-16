@@ -4,6 +4,8 @@
     "download": "Download",
     "dataPack": "Data Pack",
     "resourcePack": "Resource Pack",
+    "otherPack": "Other",
+    "forgePack": "Forge Mod",
     "experimental": "Experimental",
     "version": "Version",
     "close": "Close",

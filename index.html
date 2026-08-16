@@ -6,7 +6,7 @@
     <title>fire</title>
     <link rel="icon" type="image/svg+xml" href="assets/main/textures/favicon.svg" />
     <style>
-        /* ===== 完整样式（与上一版完全相同） ===== */
+        /* ===== 全局样式 ===== */
         * {
             margin: 0;
             padding: 0;
@@ -20,9 +20,9 @@
             font-family: 'Segoe UI', system-ui, sans-serif;
             background: #0b0806;
             background-image:
-                radial-gradient(ellipse at 30% 20%, rgba(180, 60, 0, 0.35) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 70%, rgba(220, 80, 0, 0.25) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 100%, rgba(140, 40, 0, 0.20) 0%, transparent 40%);
+                    radial-gradient(ellipse at 30% 20%, rgba(180, 60, 0, 0.35) 0%, transparent 60%),
+                    radial-gradient(ellipse at 80% 70%, rgba(220, 80, 0, 0.25) 0%, transparent 50%),
+                    radial-gradient(ellipse at 50% 100%, rgba(140, 40, 0, 0.20) 0%, transparent 40%);
             background-attachment: fixed;
             padding: 40px 20px;
         }
@@ -78,7 +78,6 @@
             opacity: 0.6;
         }
 
-        /* 设置按钮 */
         .settings-btn {
             background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -107,7 +106,6 @@
             display: block;
         }
 
-        /* 以下卡片样式不变（省略重复） */
         .packs-grid {
             display: flex;
             flex-direction: column;
@@ -193,6 +191,16 @@
             background: rgba(255, 180, 40, 0.15);
             color: #ffb74d;
             border: 1px solid rgba(255, 180, 40, 0.15);
+        }
+        .type-badge.other {
+            background: rgba(180, 120, 255, 0.15);
+            color: #b88aff;
+            border: 1px solid rgba(180, 120, 255, 0.15);
+        }
+        .type-badge.forge {
+            background: rgba(255, 100, 50, 0.20);
+            color: #ff8a5c;
+            border: 1px solid rgba(255, 100, 50, 0.20);
         }
         .project-note {
             margin-top: 6px;
@@ -318,7 +326,6 @@
             display: block;
         }
 
-        /* 模态框 */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -415,7 +422,7 @@
             font-weight: 700;
             color: #f0e6d8;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 8px;
             letter-spacing: 0.02em;
             display: flex;
             align-items: center;
@@ -426,6 +433,17 @@
             width: 1.2em;
             height: 1.2em;
             display: inline-block;
+        }
+        .modal-note {
+            text-align: center;
+            color: #b8a89a;
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+            padding: 4px 12px;
+            background: rgba(255, 200, 100, 0.05);
+            border-radius: 12px;
+            display: inline-block;
+            border: 1px solid rgba(255, 200, 100, 0.08);
         }
         .version-list {
             display: flex;
@@ -531,210 +549,230 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1 class="main-title">
-                <img src="assets/main/textures/fire.svg" alt="Fire" class="title-icon" />
-                <span id="mainTitleText">fire</span>
-            </h1>
-            <!-- 设置按钮：使用动图 settings.gif -->
-            <button class="settings-btn" id="settingsBtn" aria-label="Settings">
-                <img src="assets/main/textures/settings.gif" alt="Settings" />
-            </button>
-        </div>
-        <div class="title-underline"></div>
-
-        <div class="packs-grid" id="packsGrid"></div>
-
-        <div class="footer" id="footerText">
-            <span>fireloader</span>
-        </div>
+<div class="container">
+    <div class="header">
+        <h1 class="main-title">
+            <img src="assets/main/textures/fire.svg" alt="Fire" class="title-icon" />
+            <span id="mainTitleText">fire</span>
+        </h1>
+        <button class="settings-btn" id="settingsBtn" aria-label="Settings">
+            <img src="assets/main/textures/settings.gif" alt="Settings" />
+        </button>
     </div>
+    <div class="title-underline"></div>
 
-    <!-- 设置模态框 -->
-    <div class="modal-overlay settings-modal" id="settingsModal">
-        <div class="modal-box">
-            <div class="modal-title" id="settingsTitle">Language</div>
-            <div class="settings-options" id="settingsOptions">
-                <button class="settings-option" data-lang="en-US">English</button>
-                <button class="settings-option" data-lang="zh-CN">简体中文</button>
-                <button class="settings-option" data-lang="zh-TW">繁體中文</button>
-            </div>
-            <button class="modal-close" id="settingsCloseBtn">Close</button>
-        </div>
+    <div class="packs-grid" id="packsGrid"></div>
+
+    <div class="footer" id="footerText">
+        <span>fireloader</span>
     </div>
+</div>
 
-    <!-- 版本选择模态框 -->
-    <div class="modal-overlay version-modal" id="versionModal">
-        <div class="modal-box">
-            <div class="modal-title">
-                <img src="assets/main/textures/package.svg" alt="Package" />
-                <span id="modalTitleText">Select Version</span>
-            </div>
-            <div class="version-list" id="versionList"></div>
-            <button class="modal-close" id="closeModalBtn">Close</button>
+<!-- 设置模态框 -->
+<div class="modal-overlay settings-modal" id="settingsModal">
+    <div class="modal-box">
+        <div class="modal-title" id="settingsTitle">Language</div>
+        <div class="settings-options" id="settingsOptions">
+            <button class="settings-option" data-lang="en-US">English</button>
+            <button class="settings-option" data-lang="zh-CN">简体中文</button>
+            <button class="settings-option" data-lang="zh-TW">繁體中文</button>
         </div>
+        <button class="modal-close" id="settingsCloseBtn">Close</button>
     </div>
+</div>
 
-    <script>
-        (function() {
-            'use strict';
+<!-- 版本选择模态框 -->
+<div class="modal-overlay version-modal" id="versionModal">
+    <div class="modal-box">
+        <div class="modal-title">
+            <img src="assets/main/textures/package.svg" alt="Package" id="modalIcon" />
+            <span id="modalTitleText">Select Version</span>
+        </div>
+        <div style="text-align:center;">
+            <span class="modal-note" id="modalNote"></span>
+        </div>
+        <div class="version-list" id="versionList"></div>
+        <button class="modal-close" id="closeModalBtn">Close</button>
+    </div>
+</div>
 
-            // =============================================================
-            // 1. 语言管理
-            // =============================================================
-            const LANG_FOLDER = 'assets/main/lang/';
-            const SETTINGS_PATH = 'data/main/settings/settings.json';
+<script>
+    (function() {
+        'use strict';
 
-            let currentLang = 'en-US';
-            let langData = {};
+        // =============================================================
+        // 1. 语言管理
+        // =============================================================
+        const LANG_FOLDER = 'assets/main/lang/';
+        const SETTINGS_PATH = 'data/main/settings/settings.json';
 
-            const defaultLang = {
-                "title": "fire",
-                "selectVersion": "Select Version",
-                "download": "Download",
-                "dataPack": "Data Pack",
-                "resourcePack": "Resource Pack",
-                "experimental": "Experimental",
-                "version": "Version",
-                "close": "Close",
-                "noVersions": "No versions available",
-                "madeWith": "fireloader",
-                "settingsTitle": "Language"
-            };
+        let currentLang = 'en-US';
+        let langData = {};
 
-            async function loadLanguage(langCode) {
-                try {
-                    const res = await fetch(LANG_FOLDER + langCode + '.json');
-                    if (!res.ok) throw new Error('Language file not found');
-                    const data = await res.json();
-                    langData = { ...defaultLang, ...data };
-                } catch (e) {
-                    console.warn('Failed to load language, using default English.', e);
-                    langData = { ...defaultLang };
-                }
-                applyLanguage();
+        const defaultLang = {
+            "title": "fire",
+            "selectVersion": "Select Version",
+            "download": "Download",
+            "dataPack": "Data Pack",
+            "resourcePack": "Resource Pack",
+            "otherPack": "Other",
+            "forgePack": "Forge Mod",
+            "experimental": "Experimental",
+            "version": "Version",
+            "close": "Close",
+            "noVersions": "No versions available",
+            "madeWith": "fireloader",
+            "settingsTitle": "Language"
+        };
+
+        async function loadLanguage(langCode) {
+            try {
+                const res = await fetch(LANG_FOLDER + langCode + '.json');
+                if (!res.ok) throw new Error('Language file not found');
+                const data = await res.json();
+                langData = { ...defaultLang, ...data };
+            } catch (e) {
+                console.warn('Failed to load language, using default English.', e);
+                langData = { ...defaultLang };
             }
+            applyLanguage();
+        }
 
-            function applyLanguage() {
-                document.getElementById('mainTitleText').textContent = langData.title || 'fire';
-                document.getElementById('modalTitleText').textContent = langData.selectVersion || 'Select Version';
-                document.getElementById('closeModalBtn').textContent = langData.close || 'Close';
-                document.getElementById('footerText').innerHTML = langData.madeWith || 'fireloader';
-                document.getElementById('settingsTitle').textContent = langData.settingsTitle || 'Language';
-            }
+        function applyLanguage() {
+            document.getElementById('mainTitleText').textContent = langData.title || 'fire';
+            document.getElementById('modalTitleText').textContent = langData.selectVersion || 'Select Version';
+            document.getElementById('closeModalBtn').textContent = langData.close || 'Close';
+            document.getElementById('footerText').innerHTML = langData.madeWith || 'fireloader';
+            document.getElementById('settingsTitle').textContent = langData.settingsTitle || 'Language';
+        }
 
-            async function setLanguage(langCode) {
-                if (langCode === currentLang) return;
-                currentLang = langCode;
-                localStorage.setItem('fire-datapack-lang', langCode);
-                await loadLanguage(langCode);
-                await loadAllPacks();
-                document.querySelectorAll('.settings-option').forEach(btn => {
-                    btn.classList.toggle('selected', btn.dataset.lang === langCode);
-                });
-            }
-
-            async function initLanguage() {
-                let lang = localStorage.getItem('fire-datapack-lang') || 'en-US';
-                try {
-                    const res = await fetch(SETTINGS_PATH);
-                    if (res.ok) {
-                        const settings = await res.json();
-                        if (settings.language) {
-                            lang = settings.language;
-                            localStorage.setItem('fire-datapack-lang', lang);
-                        }
-                    }
-                } catch (e) { /* ignore */ }
-
-                currentLang = lang;
-                await loadLanguage(lang);
-                document.querySelectorAll('.settings-option').forEach(btn => {
-                    btn.classList.toggle('selected', btn.dataset.lang === lang);
-                });
-            }
-
-            // =============================================================
-            // 2. 设置模态框控制
-            // =============================================================
-            const settingsBtn = document.getElementById('settingsBtn');
-            const settingsModal = document.getElementById('settingsModal');
-            const settingsCloseBtn = document.getElementById('settingsCloseBtn');
-
-            function openSettings() {
-                settingsModal.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
-
-            function closeSettings() {
-                settingsModal.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-
-            settingsBtn.addEventListener('click', openSettings);
-            settingsCloseBtn.addEventListener('click', closeSettings);
-            settingsModal.addEventListener('click', function(e) {
-                if (e.target === settingsModal) closeSettings();
-            });
-
+        async function setLanguage(langCode) {
+            if (langCode === currentLang) return;
+            currentLang = langCode;
+            localStorage.setItem('fire-datapack-lang', langCode);
+            await loadLanguage(langCode);
+            await loadAllPacks();
             document.querySelectorAll('.settings-option').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const lang = this.dataset.lang;
-                    setLanguage(lang);
-                    closeSettings();
-                });
+                btn.classList.toggle('selected', btn.dataset.lang === langCode);
             });
+        }
 
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    if (settingsModal.classList.contains('active')) closeSettings();
-                    if (versionModal.classList.contains('active')) closeModal();
+        async function initLanguage() {
+            let lang = localStorage.getItem('fire-datapack-lang') || 'en-US';
+            try {
+                const res = await fetch(SETTINGS_PATH);
+                if (res.ok) {
+                    const settings = await res.json();
+                    if (settings.language) {
+                        lang = settings.language;
+                        localStorage.setItem('fire-datapack-lang', lang);
+                    }
                 }
+            } catch (e) { /* ignore */ }
+
+            currentLang = lang;
+            await loadLanguage(lang);
+            document.querySelectorAll('.settings-option').forEach(btn => {
+                btn.classList.toggle('selected', btn.dataset.lang === lang);
             });
+        }
 
-            // =============================================================
-            // 3. 数据包 / 资源包 加载
-            // =============================================================
-            const PACK_JSON_FILES = [
-                'neovillage.json',
-                'structure_optimization.json'
-            ];
+        // =============================================================
+        // 2. 设置模态框控制
+        // =============================================================
+        const settingsBtn = document.getElementById('settingsBtn');
+        const settingsModal = document.getElementById('settingsModal');
+        const settingsCloseBtn = document.getElementById('settingsCloseBtn');
 
-            const JSON_BASE = 'data/main/file/';
-            const DOWNLOAD_BASE = 'assets/main/download_src/';
-            const ICON_VERSION = 'assets/main/textures/version.svg';
-            const ICON_DOWNLOAD = 'assets/main/textures/download.svg';
-            const ICON_PACKAGE = 'assets/main/textures/package.svg';
-            const ICON_PIN = 'assets/main/textures/pin.svg';
-            const ICON_CLIP = 'assets/main/textures/clip.svg';
+        function openSettings() {
+            settingsModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
 
-            const packsGrid = document.getElementById('packsGrid');
-            const versionModal = document.getElementById('versionModal');
-            const versionList = document.getElementById('versionList');
-            const closeModalBtn = document.getElementById('closeModalBtn');
+        function closeSettings() {
+            settingsModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
 
-            function getVersionType(v) {
-                const map = { 1: 'Alpha', 2: 'Beta', 3: 'Stable Beta', 4: 'Official' };
-                return map[v] || 'Unknown';
+        settingsBtn.addEventListener('click', openSettings);
+        settingsCloseBtn.addEventListener('click', closeSettings);
+        settingsModal.addEventListener('click', function(e) {
+            if (e.target === settingsModal) closeSettings();
+        });
+
+        document.querySelectorAll('.settings-option').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const lang = this.dataset.lang;
+                setLanguage(lang);
+                closeSettings();
+            });
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                if (settingsModal.classList.contains('active')) closeSettings();
+                if (versionModal.classList.contains('active')) closeModal();
             }
+        });
 
-            function getPackType(checkCode) {
-                if (checkCode === 1 || checkCode === 48) return 'data';
-                if (checkCode === 0 || checkCode === 24) return 'resource';
-                return null;
+        // =============================================================
+        // 3. 数据包 / 资源包 / 其他 / Forge 加载
+        // =============================================================
+        const PACK_JSON_FILES = [
+            'neovillage.json',
+            'structure_optimization.json',
+            'example_forge.json'
+        ];
+
+        const JSON_BASE = 'data/main/file/';
+        const DOWNLOAD_BASE = 'assets/main/download_src/';
+        const ICON_VERSION = 'assets/main/textures/version.svg';
+        const ICON_FORGE = 'assets/main/textures/forge.svg';
+        const ICON_DOWNLOAD = 'assets/main/textures/download.svg';
+        const ICON_PACKAGE = 'assets/main/textures/package.svg';
+        const ICON_PIN = 'assets/main/textures/pin.svg';
+        const ICON_CLIP = 'assets/main/textures/clip.svg';
+
+        const packsGrid = document.getElementById('packsGrid');
+        const versionModal = document.getElementById('versionModal');
+        const versionList = document.getElementById('versionList');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const modalIcon = document.getElementById('modalIcon');
+        const modalNote = document.getElementById('modalNote');
+
+        function getVersionType(v) {
+            const map = { 1: 'Alpha', 2: 'Beta', 3: 'Stable Beta', 4: 'Official' };
+            return map[v] || 'Unknown';
+        }
+
+        function getPackType(checkCode) {
+            if (checkCode === 1 || checkCode === 48) return 'data';
+            if (checkCode === 0 || checkCode === 24) return 'resource';
+            if (checkCode === 2) return 'other';
+            if (checkCode === 128) return 'forge';
+            return null;
+        }
+
+        function openModal(packData) {
+            // 根据类型设置图标
+            if (packData.packType === 'forge') {
+                modalIcon.src = ICON_FORGE;
+            } else {
+                modalIcon.src = ICON_VERSION;
             }
+            // 显示注释（使用 description 字段）
+            modalNote.textContent = packData.description || '';
+            modalNote.style.display = (packData.description && packData.description.trim() !== '') ? 'inline-block' : 'none';
 
-            function openModal(packData) {
-                versionList.innerHTML = '';
-                const availableVersions = packData._availableVersions || [];
-                if (availableVersions.length === 0) {
-                    versionList.innerHTML = `<div style="text-align:center;color:#8a7a6a;padding:20px 0;">${langData.noVersions || 'No versions available'}</div>`;
-                } else {
-                    availableVersions.forEach(item => {
-                        const div = document.createElement('div');
-                        div.className = 'version-item';
-                        div.innerHTML = `
+            versionList.innerHTML = '';
+            const availableVersions = packData._availableVersions || [];
+            if (availableVersions.length === 0) {
+                versionList.innerHTML = `<div style="text-align:center;color:#8a7a6a;padding:20px 0;">${langData.noVersions || 'No versions available'}</div>`;
+            } else {
+                availableVersions.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'version-item';
+                    div.innerHTML = `
                             <div class="version-left">
                                 <span class="version-icon"><img src="${ICON_VERSION}" alt="Version" /></span>
                                 <span class="version-number">${item.version}</span>
@@ -743,82 +781,110 @@
                                 <img src="${ICON_DOWNLOAD}" alt="Download" />
                             </button>
                         `;
-                        const dlBtn = div.querySelector('.version-download');
-                        dlBtn.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            const a = document.createElement('a');
-                            a.href = DOWNLOAD_BASE + item.file;
-                            a.download = item.file;
-                            document.body.appendChild(a);
-                            a.click();
-                            document.body.removeChild(a);
-                        });
-                        versionList.appendChild(div);
+                    const dlBtn = div.querySelector('.version-download');
+                    dlBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const a = document.createElement('a');
+                        a.href = DOWNLOAD_BASE + item.file;
+                        a.download = item.file;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
                     });
-                }
-                versionModal.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
-
-            function closeModal() {
-                versionModal.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-
-            if (!window._modalBound) {
-                closeModalBtn.addEventListener('click', closeModal);
-                versionModal.addEventListener('click', function(e) {
-                    if (e.target === versionModal) closeModal();
+                    versionList.appendChild(div);
                 });
-                window._modalBound = true;
             }
+            versionModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
 
-            async function loadPack(jsonFileName) {
-                try {
-                    const res = await fetch(JSON_BASE + jsonFileName);
-                    if (!res.ok) return null;
-                    const data = await res.json();
+        function closeModal() {
+            versionModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
 
-                    const checkCode = data.check_code;
-                    const packType = getPackType(checkCode);
-                    if (!packType) return null;
+        if (!window._modalBound) {
+            closeModalBtn.addEventListener('click', closeModal);
+            versionModal.addEventListener('click', function(e) {
+                if (e.target === versionModal) closeModal();
+            });
+            window._modalBound = true;
+        }
 
-                    const name = data.name || 'unknown.zip';
-                    const versionType = getVersionType(data.version);
-                    const note = data.note || '';
-                    const verlevel = data.verlevel;
-                    const fileMap = data.file || {};
-                    const minecraftVersions = data.minecraft || [];
-                    const isExperimental = data.experimental === true;
+        async function loadPack(jsonFileName) {
+            try {
+                const res = await fetch(JSON_BASE + jsonFileName);
+                if (!res.ok) return null;
+                const data = await res.json();
 
-                    const available = [];
-                    for (const mcVer of minecraftVersions) {
-                        const fileName = fileMap[mcVer];
-                        if (fileName) available.push({ version: mcVer, file: fileName + '.zip' });
+                const checkCode = data.check_code;
+                const packType = getPackType(checkCode);
+                if (!packType) return null;
+
+                const name = data.name || 'unknown';
+                const versionType = getVersionType(data.version);
+                const note = data.note || '';          // 主页面注释
+                const description = data.description || ''; // 弹窗注释
+                const verlevel = data.verlevel;
+                const fileMap = data.file || {};
+                const minecraftVersions = data.minecraft || [];
+                const isExperimental = data.experimental === true;
+                const extension = data.extension || 'zip';
+
+                const available = [];
+                for (const mcVer of minecraftVersions) {
+                    const baseName = fileMap[mcVer];
+                    if (baseName) {
+                        const fullFileName = baseName + '.' + extension;
+                        available.push({ version: mcVer, file: fullFileName });
                     }
-                    available.sort((a, b) => b.version.localeCompare(a.version, undefined, { numeric: true }));
-
-                    return { name, versionType, note, verlevel, isExperimental, available, packType };
-                } catch (e) {
-                    return null;
                 }
+                available.sort((a, b) => b.version.localeCompare(a.version, undefined, { numeric: true }));
+
+                return {
+                    name,
+                    versionType,
+                    note,
+                    description,
+                    verlevel,
+                    isExperimental,
+                    available,
+                    packType,
+                    extension
+                };
+            } catch (e) {
+                return null;
             }
+        }
 
-            async function loadAllPacks() {
-                packsGrid.innerHTML = '';
+        async function loadAllPacks() {
+            packsGrid.innerHTML = '';
 
-                for (const fileName of PACK_JSON_FILES) {
-                    const pack = await loadPack(fileName);
-                    if (!pack || pack.available.length === 0) continue;
+            for (const fileName of PACK_JSON_FILES) {
+                const pack = await loadPack(fileName);
+                if (!pack || pack.available.length === 0) continue;
 
-                    const card = document.createElement('div');
-                    card.className = 'project-card';
-                    const expClass = pack.isExperimental ? '' : 'hidden';
+                const card = document.createElement('div');
+                card.className = 'project-card';
+                const expClass = pack.isExperimental ? '' : 'hidden';
 
-                    const typeLabel = pack.packType === 'data' ? (langData.dataPack || 'Data Pack') : (langData.resourcePack || 'Resource Pack');
-                    const typeClass = pack.packType === 'data' ? 'data' : 'resource';
+                let typeLabel = '';
+                let typeClass = '';
+                if (pack.packType === 'data') {
+                    typeLabel = langData.dataPack || 'Data Pack';
+                    typeClass = 'data';
+                } else if (pack.packType === 'resource') {
+                    typeLabel = langData.resourcePack || 'Resource Pack';
+                    typeClass = 'resource';
+                } else if (pack.packType === 'other') {
+                    typeLabel = langData.otherPack || 'Other';
+                    typeClass = 'other';
+                } else if (pack.packType === 'forge') {
+                    typeLabel = langData.forgePack || 'Forge Mod';
+                    typeClass = 'forge';
+                }
 
-                    card.innerHTML = `
+                card.innerHTML = `
                         <div class="project-header">
                             <div class="project-icon"><img src="${ICON_PACKAGE}" alt="Package" /></div>
                             <div class="project-name">
@@ -846,27 +912,27 @@
                             </button>
                         </div>
                     `;
-                    const btn = card.querySelector('.download-btn');
-                    pack._availableVersions = pack.available;
-                    btn.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        openModal(pack);
-                    });
-                    card.classList.add('visible');
-                    packsGrid.appendChild(card);
-                }
+                const btn = card.querySelector('.download-btn');
+                pack._availableVersions = pack.available;
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    openModal(pack);
+                });
+                card.classList.add('visible');
+                packsGrid.appendChild(card);
             }
+        }
 
-            // =============================================================
-            // 启动
-            // =============================================================
-            async function init() {
-                await initLanguage();
-                await loadAllPacks();
-            }
+        // =============================================================
+        // 启动
+        // =============================================================
+        async function init() {
+            await initLanguage();
+            await loadAllPacks();
+        }
 
-            init();
-        })();
-    </script>
+        init();
+    })();
+</script>
 </body>
 </html>

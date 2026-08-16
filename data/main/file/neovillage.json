@@ -1,18 +1,14 @@
 {
-    "name":"neovillage.zip",
-    "version":1,
-    "minecraft":[
-        "1.20.1",
-        "1.21.1",
-        "1.21.11"
-    ],
-    "verlevel":3,
-    "note":"bug fix",
-    "file":{
-        "1.20.1":"neovillage-1.20.1",
-        "1.21.1":"neovillage-1.21.1",
-        "1.21.11":"neovillage-1.21.11"
+    "name": "neovillage.zip",
+    "version": 1,
+    "minecraft": ["1.20.1", "1.21.11"],
+    "verlevel": 3,
+    "note": "bug fix",
+    "description": " ",
+    "file": {
+        "1.20.1": "neovillage-1.20.1",
+        "1.21.11": "neovillage-1.21.11"
     },
-    "check_code":1,
+    "check_code": 1,
     "experimental": false
 }
