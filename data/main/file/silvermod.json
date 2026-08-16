@@ -1,17 +1,18 @@
 {
-    "name":"Structure_optimization.zip",
+    "name":"silver.jar",
     "version":2,
     "minecraft":[
-        "1.20.1"
+        "1.21.1"
         
     ],
     "verlevel":1.0,
-    "note":"improve",
+    "note":"power by forge. ",
     "description": " ",
     "file":{
-        "1.20.1":"Structure_optimization"
+        "1.21.1":"silvermod-1.21.1"
         
     },
-    "check_code":1,
-    "experimental": true
+    "check_code":128,
+    "experimental": true,
+    "extension": "jar"
 }
