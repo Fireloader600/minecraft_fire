@@ -1,0 +1,17 @@
+{
+    "name":"Structure_optimization.zip",
+    "version":2,
+    "minecraft":[
+        "1.20.1"
+        
+    ],
+    "verlevel":1.0,
+    "note":"improve",
+    "description": " ",
+    "file":{
+        "1.20.1":"Structure_optimization"
+        
+    },
+    "check_code":1,
+    "experimental": true
+}
