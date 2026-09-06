@@ -9,6 +9,6 @@
         "0.0.1": "fireplugin-mdk-0.0.1"
         
     },
-    "check_code": 1,
+    "check_code": 256,
     "experimental": false
 }
