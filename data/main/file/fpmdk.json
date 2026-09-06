@@ -1,0 +1,14 @@
+{
+    "name": "fireplugin-mdk.zip",
+    "version": 1,
+    "minecraft": ["0.0.1"],
+    "verlevel": 3,
+    "note": " ",
+    "description": "fireplugin mdk",
+    "file": {
+        "0.0.1": "fireplugin-mdk-0.0.1"
+        
+    },
+    "check_code": 1,
+    "experimental": false
+}

@@ -11,5 +11,6 @@
     "close": "关闭",
     "noVersions": "没有可用版本",
     "madeWith": "fireloader",
-    "settingsTitle": "语言"
+    "settingsTitle": "语言",
+    "mdkPack":"MDK"
 }

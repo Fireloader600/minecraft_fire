@@ -11,5 +11,6 @@
     "close": "Close",
     "noVersions": "No versions available",
     "madeWith": "fireloader",
-    "settingsTitle": "Language"
+    "settingsTitle": "Language",
+    "mdkPack":"MDK"
 }

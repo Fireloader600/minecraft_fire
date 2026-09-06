@@ -1,18 +1,19 @@
 {
-    "name":"silver.jar",
-    "version":2,
-    "minecraft":[
-        "1.21.1"
-        
+    "name": "silver.jar",
+    "version": 1,
+    "minecraft": [
+        "1.21.1(1.0.0)",
+        "1.21.1(1.0.1)"
+
     ],
-    "verlevel":1.0,
-    "note":"power by forge. ",
-    "description": " ",
-    "file":{
-        "1.21.1":"silvermod-1.0.0-1.21.1"
-        
+    "verlevel": 1.0,
+    "note": "power by forge.",
+    "description": "Silver mod for Minecraft 1.21.1",
+    "file": {
+        "1.21.1(1.0.0)": "silver-1.0.0-1.21.1",
+        "1.21.1(1.0.1)": "silver-1.0.1-1.21.1"
     },
-    "check_code":128,
-    "experimental": true,
+    "check_code": 128,
+    "experimental": false,
     "extension": "jar"
 }

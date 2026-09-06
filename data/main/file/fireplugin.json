@@ -1,0 +1,21 @@
+{
+    "name": "fireplugin.jar",
+    "version": 1,
+    "minecraft": [
+        "1.21.1(0.0.1)",
+        "1.21.1(0.0.2)"
+        
+
+    ],
+    "verlevel": 1.0,
+    "note": "power by forge.",
+    "description": "none",
+    "file": {
+        "1.21.1(0.0.1)": "fireplugin-0.0.1-1.21.1",
+        "1.21.1(0.0.2)": "fireplugin-0.0.2-1.21.1"
+        
+    },
+    "check_code": 128,
+    "experimental": false,
+    "extension": "jar"
+}
